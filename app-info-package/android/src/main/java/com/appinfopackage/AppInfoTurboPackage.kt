@@ -6,14 +6,20 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.module.annotations.ReactModule
 import com.facebook.react.module.model.ReactModuleInfo
 import com.facebook.react.module.model.ReactModuleInfoProvider
+import com.facebook.react.turbomodule.core.interfaces.TurboModule
 
-class AppInfoTurboPackage : TurboReactPackage {
+class AppInfoTurboPackage : TurboReactPackage() {
   override fun getModule(name: String, context: ReactApplicationContext): NativeModule? {
-    return null
+    return when (name) {
+      AppInfoModule.NAME -> AppInfoModule(context)
+      else -> null
+    }
   }
 
-  override fun getReactInfoModuleProvider(): ReactModuleInfoProvider {
-    val moduleList: Array<Class<out NativeModule?>> = arrayOf()
+  override fun getReactModuleInfoProvider(): ReactModuleInfoProvider {
+    val moduleList: Array<Class<out NativeModule?>> = arrayOf(
+            AppInfoModule::class.java
+    )
     val reactModuleInfoMap: MutableMap<String, ReactModuleInfo> = HashMap()
 
     for (moduleClass in moduleList) {
